@@ -1,0 +1,60 @@
+body {
+    background-color: #7f9c8d;
+}
+
+.game-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.garden {
+    width: 600px;
+    height: 400px;
+    background-color: #c7e9c0;
+    position: relative;
+    border-radius: 8px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+}
+
+.plant {
+    position: absolute;
+    transition: transform 0.5s;
+    cursor: pointer;
+}
+
+.plant-symbol {
+    font-size: 40px;
+    color: #2b4e32;
+}
+
+.tooltip {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 4px 8px;
+    font-size: 12px;
+    border-radius: 4px;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.plant:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+}
+
+.plant.grow {
+    transform: scale(1.2);
+}
+
+.watering-can {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    font-size: 40px;
+    color: #2b4e32;
+    cursor: pointer;
+}

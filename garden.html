@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pixel Garden Game</title>
+    <style>
+        /* CSS styles for the garden and plant images */
+        body {
+            background-color: #7f9c8d;
+        }
+
+        .game-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .garden {
+            width: 600px;
+            height: 400px;
+            background-color: #c7e9c0;
+            position: relative;
+            border-radius: 8px;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .plant {
+            position: absolute;
+            transition: transform 0.5s;
+            cursor: pointer;
+        }
+
+        .plant img {
+            width: 40px;
+            height: 40px;
+            image-rendering: pixelated;
+        }
+
+        .tooltip {
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 4px 8px;
+            font-size: 12px;
+            border-radius: 4px;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .plant:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .plant.grow {
+            transform: scale(1.2);
+        }
+
+        .watering-can {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="garden">
+            <div class="plant" id="plant1" style="top: 100px; left: 100px;" onclick="growPlant(this)">
+                <img src="path/to/plant1.png" alt="Plant 1">
+                <div class="tooltip">Plant 1</div>
+            </div>
+            <div class="plant" id="plant2" style="top: 200px; left: 300px;" onclick="growPlant(this)">
+                <img src="path/to/plant2.png" alt="Plant 2">
+                <div class="tooltip">Plant 2</div>
+            </div>
+            <!-- Add more plant elements as needed -->
+            <img class="watering-can" id="watering-can" src="path/to/watering_can.png" alt="Watering Can" onclick="waterPlants()">
+        </div>
+    </div>
+
+    <script>
+        // Plant data
+        const plants = [
+            { id: "plant1", image: "path/to/plant1.png", name: "Plant 1", growthStage: 0 },
+            { id: "plant2", image: "path/to/plant2.png", name: "Plant 2", growthStage: 0 }
+            // Add more plants here
+        ];
+
+        // Constants
+        const maxGrowthStage = 3;
+        const growthInterval = 2000; // milliseconds
+
+        // Plant growth interval IDs
+        let growthIntervals = {};
+
+        // Function to grow the plant
+        function growPlant(plant) {
+            const plantData = plants.find(p => p.id === plant.id);
+            if (plantData.growthStage < maxGrowthStage) {
+                clearInterval(growthIntervals[plant.id]);
+                plantData.growthStage++;
+                plant.classList.add('grow');
+                plant.getElementsByTagName('img')[0].src = plantData.image.replace(".png", `_${plantData.growthStage}.png`);
+                plant.getElementsByClassName('tooltip')[0].innerHTML = `${plantData.name} - Stage ${plantData.growthStage}`;
+                growthIntervals[plant.id] = setInterval(() => growPlant(plant), growthInterval);
+            }
+        }
+
+        // Function to water the plants
+        function waterPlants() {
+            for (const plant of plants) {
+                const plantElement = document.getElementById(plant.id);
+                if (plantElement.classList.contains('grow')) {
+                    plantElement.classList.remove('grow');
+                }
+                plantElement.getElementsByTagName('img')[0].src = plant.image;
+                plantElement.getElementsByClassName('tooltip')[0].innerHTML = plant.name;
+                plant.growthStage = 0;
+                clearInterval(growthIntervals[plant.id]);
+            }
+        }
+    </script>
+</body>
+</html>
